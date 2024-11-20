@@ -47,3 +47,11 @@ Ensure you have the following installed:
    ```bash
    git clone git@github.com:R7rainz/brainbox.git
    cd brainbox
+
+2. **Install Dependencies**:
+   ```bash
+   npm install
+
+3. **Start Application**:
+   ```bash
+   npm start
