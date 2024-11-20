@@ -1,2 +1,0 @@
-# brainbox
-Note Taking App
