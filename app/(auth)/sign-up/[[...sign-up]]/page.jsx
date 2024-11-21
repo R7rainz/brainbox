@@ -1,37 +1,46 @@
 "use client";
+
 import React from "react";
 import { SignUp } from "@clerk/nextjs";
 import { motion } from "framer-motion";
+import { Zap } from 'lucide-react';
+import { Card } from "@/components/ui/card";
 
-export default function Page() {
+export default function SignUpPage() {
   return (
-    <section className="min-h-screen bg-gradient-to-br from-red-950 via-gray-900 to-black text-white overflow-hidden flex items-center justify-center relative">
-      {/* Background Animation */}
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-red-800 to-red-950 opacity-30 blur-2xl"
-        initial={{ scale: 1.1, rotate: 0 }}
-        animate={{ scale: 1.2, rotate: 5 }}
-        transition={{
-          duration: 20,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut",
-        }}
-      />
-      <motion.div
-        className="absolute inset-0 bg-gradient-to-l from-gray-900 to-black opacity-40 blur-3xl"
-        initial={{ scale: 1.2, rotate: -5 }}
-        animate={{ scale: 1.1, rotate: 0 }}
-        transition={{
-          duration: 15,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut",
-        }}
-      />
+    <section className="min-h-screen bg-black text-white overflow-hidden flex items-center justify-center relative">
+      {/* Futuristic grid background */}
+      <div className="absolute inset-0 z-0">
+        <div className="h-full w-full bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:4rem_4rem]" />
+      </div>
 
-      <div className="w-full max-w-md p-8 z-10">
-        {/* Animated Heading */}
+      {/* Glowing orbs */}
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-teal-500 rounded-full filter blur-[128px] opacity-20 animate-pulse" />
+      <div className="absolute bottom-1/4 left-1/4 w-64 h-64 bg-blue-500 rounded-full filter blur-[96px] opacity-20 animate-pulse" />
+
+      {/* Random glowy lines */}
+      {[...Array(5)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute h-0.5 w-24 bg-gradient-to-r from-blue-400 to-teal-400 opacity-30"
+          style={{
+            top: `${Math.random() * 100}%`,
+            left: `${Math.random() * 100}%`,
+            rotate: `${Math.random() * 360}deg`,
+          }}
+          animate={{
+            opacity: [0.3, 0.6, 0.3],
+            scale: [1, 1.2, 1],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            repeatType: "reverse",
+          }}
+        />
+      ))}
+
+      <Card className="w-full max-w-md p-8 z-10 bg-gray-900/30 backdrop-blur-md border-gray-800">
         <motion.div
           initial="hidden"
           animate="visible"
@@ -54,7 +63,7 @@ export default function Page() {
               duration: 0.8,
               ease: [0.6, -0.05, 0.01, 0.99],
             }}
-            className="text-5xl font-extrabold text-center mb-6 tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-red-300 to-red-600"
+            className="text-4xl font-bold text-center mb-6 tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-cyan-300 to-teal-400"
           >
             Create Your Account
           </motion.h1>
@@ -73,7 +82,6 @@ export default function Page() {
           </motion.p>
         </motion.div>
 
-        {/* SignUp Component with Hover Effect */}
         <motion.div
           initial={{ opacity: 0, y: 20, rotate: 2 }}
           animate={{ opacity: 1, y: 0, rotate: 0 }}
@@ -87,33 +95,24 @@ export default function Page() {
         >
           <SignUp />
         </motion.div>
-      </div>
+      </Card>
 
-      {/* Floating Particles */}
-      {[...Array(5)].map((_, index) => (
-        <motion.div
-          key={index}
-          className="absolute rounded-full bg-red-500 opacity-20"
-          style={{
-            width: Math.random() * 100 + 50,
-            height: Math.random() * 100 + 50,
-          }}
-          initial={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
-          animate={{
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-          }}
-          transition={{
-            duration: Math.random() * 10 + 20,
-            repeat: Infinity,
-            repeatType: "reverse",
-            ease: "linear",
-          }}
-        />
-      ))}
+      {/* Floating icon */}
+      <motion.div
+        className="absolute bottom-10 left-10 text-teal-400"
+        animate={{
+          y: [0, -20, 0],
+          rotate: [0, 10, -10, 0],
+        }}
+        transition={{
+          duration: 5,
+          repeat: Infinity,
+          repeatType: "loop",
+        }}
+      >
+        <Zap className="h-12 w-12" />
+      </motion.div>
     </section>
   );
 }
+

@@ -1,17 +1,19 @@
 "use client";
-import Logo from '@/app/_components/Logo';
-import { Button } from '@/components/ui/button';
-import { db } from '@/config/firebaseConfig';
-import { collection, doc, onSnapshot, query, setDoc, where } from 'firebase/firestore';
-import { Bell, Loader2Icon } from 'lucide-react';
-import React, { useEffect, useState, useCallback } from 'react';
-import DocumentList from './DocumentList';
-import uuid4 from 'uuid4';
-import { useUser } from '@clerk/nextjs';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { Progress } from "@/components/ui/progress";
+import { useUser } from '@clerk/nextjs';
+import { motion } from 'framer-motion';
+import { collection, doc, onSnapshot, query, setDoc, where } from 'firebase/firestore';
+import uuid4 from 'uuid4';
+import { Bell, Loader2Icon, Plus } from 'lucide-react';
 import { toast } from 'sonner';
+
+import Logo from '@/app/_components/Logo';
+import DocumentList from './DocumentList';
 import NotifiationBox from './NotifiationBox';
+import { Button } from '@/components/ui/button';
+import { Progress } from "@/components/ui/progress";
+import { db } from '@/config/firebaseConfig';
 
 const MAX_FILE = Number(process.env.NEXT_PUBLIC_MAX_FILE_COUNT) || 5;
 
@@ -19,8 +21,8 @@ function SideNav({ params }) {
     const [documentList, setDocumentList] = useState([]);
     const [documentName, setDocumentName] = useState("Untitled Document");
     const [coverImage, setCoverImage] = useState('/cover.png');
-    const { user } = useUser();
     const [loading, setLoading] = useState(false);
+    const { user } = useUser();
     const router = useRouter();
 
     const GetDocumentList = useCallback(() => {
@@ -90,22 +92,36 @@ function SideNav({ params }) {
     };
 
     return (
-        <div className="h-screen md:w-72 hidden md:block fixed bg-gradient-to-br from-red-900 via-gray-900 to-black p-5 shadow-md">
+        <motion.div 
+            className="h-screen md:w-72 hidden md:block fixed bg-gray-900 p-5 shadow-lg"
+            initial={{ x: -100, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+        >
             <div className="flex justify-between items-center">
                 <Logo />
                 <NotifiationBox>
-                    <Bell className="h-5 w-5 text-gray-300" />
+                    <Bell className="h-5 w-5 text-gray-400 hover:text-blue-400 transition-colors" />
                 </NotifiationBox>
             </div>
-            <hr className="my-5 border-gray-700" />
+            <motion.hr 
+                className="my-5 border-gray-800"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+            />
             <div>
-                <div className="flex justify-between items-center">
-                    <h2 className="font-medium text-gray-100">{documentName}</h2>
-                    <Button size="sm" className="text-lg bg-red-900 hover:bg-red-700 text-white" onClick={CreateNewDocument}>
+                <div className="flex justify-between items-center mb-4">
+                    <h2 className="font-medium text-gray-200">{documentName}</h2>
+                    <Button 
+                        size="sm" 
+                        className="bg-blue-600 hover:bg-blue-700 text-white"
+                        onClick={CreateNewDocument}
+                    >
                         {loading ? (
                             <Loader2Icon className="h-4 w-4 animate-spin" />
                         ) : (
-                            '+'
+                            <Plus className="h-4 w-4" />
                         )}
                     </Button>
                 </div>
@@ -115,17 +131,30 @@ function SideNav({ params }) {
             <DocumentList documentList={documentList} params={params} />
 
             {/* Progress Bar */}
-            <div className="absolute bottom-10 w-[85%]">
-                <Progress value={(documentList?.length / MAX_FILE) * 100} className="bg-gray-700" />
-                <h2 className="text-sm font-light text-gray-100 my-2">
-                    <strong>{documentList?.length}</strong> Out of <strong>{MAX_FILE}</strong> files used
+            <motion.div 
+                className="absolute bottom-10 w-[85%]"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+            >
+                <Progress 
+                    value={(documentList?.length / MAX_FILE) * 100} 
+                    className="bg-gray-800"
+                />
+                <h2 className="text-sm font-light text-gray-300 my-2">
+                    <strong>{documentList?.length}</strong> out of <strong>{MAX_FILE}</strong> files used
                 </h2>
-                <h2 className="text-sm font-light text-gray-300">
-                    Upgrade your plan for unlimited access
-                </h2>
-            </div>
-        </div>
+                <Button 
+                    variant="outline" 
+                    className="w-full mt-2 bg-gray-800 hover:bg-gray-700 text-blue-400 border-gray-700"
+                    onClick={() => console.log("Upgrade clicked")}
+                >
+                    Upgrade for Unlimited Access
+                </Button>
+            </motion.div>
+        </motion.div>
     );
 }
 
 export default SideNav;
+

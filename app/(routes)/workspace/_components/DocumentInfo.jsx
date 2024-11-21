@@ -1,91 +1,113 @@
 "use client"
 
-import CoverPicker from '@/app/_components/CoverPicker'
-import EmojiPickerComponent from '@/app/_components/EmojiPickerComponent';
-import { db } from '@/config/firebaseConfig';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-
-import { SmilePlus } from 'lucide-react';
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import { toast } from 'sonner';
+import Image from 'next/image'
+import { motion } from 'framer-motion'
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { toast } from 'sonner'
+import { SmilePlus } from 'lucide-react'
+
+import CoverPicker from '@/app/_components/CoverPicker'
+import EmojiPickerComponent from '@/app/_components/EmojiPickerComponent'
+import { db } from '@/config/firebaseConfig'
+import { Input } from "@/components/ui/input"
 
 function DocumentInfo({ params, updateDocumentInfo }) {
-    const [coverImage, setCoverImage] = useState('/cover.png');
-    const [emoji, setEmoji] = useState();
-    const [documentInfo, setDocumentInfo] = useState();
+    const [coverImage, setCoverImage] = useState('/cover.png')
+    const [emoji, setEmoji] = useState()
+    const [documentInfo, setDocumentInfo] = useState()
     
     useEffect(() => {
-        if (params) GetDocumentInfo();
-    }, [params]);
+        if (params) GetDocumentInfo()
+    }, [params])
 
-    /**
-     * Used to get document info
-     */
     const GetDocumentInfo = async () => {
-        const docRef = doc(db, 'workspaceDocuments', params?.documentid);
-        const docSnap = await getDoc(docRef);
+        const docRef = doc(db, 'workspaceDocuments', params?.documentid)
+        const docSnap = await getDoc(docRef)
 
         if (docSnap.exists()) {
-            setDocumentInfo(docSnap.data());
-            setEmoji(docSnap.data()?.emoji);
-            docSnap.data()?.coverImage && setCoverImage(docSnap.data()?.coverImage);
+            setDocumentInfo(docSnap.data())
+            setEmoji(docSnap.data()?.emoji)
+            docSnap.data()?.coverImage && setCoverImage(docSnap.data()?.coverImage)
         }
     }
 
     const handleUpdateDocumentInfo = async (key, value) => {
-        const docRef = doc(db, 'workspaceDocuments', params?.documentid);
+        const docRef = doc(db, 'workspaceDocuments', params?.documentid)
         await updateDoc(docRef, {
             [key]: value
-        });
+        })
 
-        updateDocumentInfo(key, value);  // Notify parent component (SideNav) of the update
-        toast('Document Updated!');
+        updateDocumentInfo(key, value)
+        toast('Document Updated!', {
+            description: `Successfully updated ${key}.`,
+        })
     }
 
     return (
-        <div>
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+            className="bg-gray-900 text-gray-100"
+        >
             {/* Cover Picker */}
             <CoverPicker setNewCover={(cover) => {
-                setCoverImage(cover);
-                handleUpdateDocumentInfo('coverImage', cover);
+                setCoverImage(cover)
+                handleUpdateDocumentInfo('coverImage', cover)
             }}>
-                <div className='relative group cursor-pointer'>
-                    <h2 className='hidden absolute p-4 w-full h-full
-                    items-center group-hover:flex
-                    justify-center'>Change Cover</h2>
-                    <div className='group-hover:opacity-40'>
-                        <Image src={coverImage} width={400} height={400}
-                            className='w-full h-[200px] object-cover'
-                        />
-                    </div>
+                <div className='relative group cursor-pointer overflow-hidden'>
+                    <motion.div 
+                        className='absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300'
+                        whileHover={{ scale: 1.05 }}
+                    >
+                        <span className="text-white font-medium">Change Cover</span>
+                    </motion.div>
+                    <Image 
+                        src={coverImage} 
+                        width={1200} 
+                        height={400}
+                        className='w-full h-[200px] object-cover transition-opacity duration-300 group-hover:opacity-75'
+                        alt="Document cover"
+                    />
                 </div>
             </CoverPicker>
 
             {/* Emoji Picker */}
-            <div className='absolute ml-10 px-20 mt-[-40px] cursor-pointer'>
+            <div className='absolute left-8 top-[180px]'>
                 <EmojiPickerComponent
                     setEmojiIcon={(emoji) => {
-                        setEmoji(emoji);
-                        handleUpdateDocumentInfo('emoji', emoji);
-                    }}>
-                    <div className='bg-[#ffffffb0] p-4 rounded-md'>
-                        {emoji ? <span className='text-5xl'>{emoji}</span> : <SmilePlus className='h-10 w-10 text-gray-500' />}
-                    </div>
+                        setEmoji(emoji)
+                        handleUpdateDocumentInfo('emoji', emoji)
+                    }}
+                >
+                    <motion.div 
+                        className='bg-gray-800 p-4 rounded-full shadow-lg'
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                    >
+                        {emoji ? (
+                            <span className='text-5xl'>{emoji}</span>
+                        ) : (
+                            <SmilePlus className='h-10 w-10 text-gray-400' />
+                        )}
+                    </motion.div>
                 </EmojiPickerComponent>
             </div>
 
             {/* File Name */}
-            <div className='mt-10 px-20 ml-10 p-10'>
-                <input type="text"
+            <div className='mt-16 px-8 py-4'>
+                <Input
+                    type="text"
                     placeholder='Untitled Document'
                     defaultValue={documentInfo?.documentName}
-                    className='font-bold text-4xl outline-none'
+                    className='font-bold text-3xl bg-transparent border-none outline-none focus:ring-0 placeholder-gray-500 text-gray-100'
                     onBlur={(event) => handleUpdateDocumentInfo('documentName', event.target.value)}
                 />
             </div>
-        </div>
+        </motion.div>
     )
 }
 
-export default DocumentInfo;
+export default DocumentInfo
+

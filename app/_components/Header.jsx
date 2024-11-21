@@ -1,10 +1,26 @@
 'use client'
 
-import React from "react"
+import React, { useRef } from "react"
 import { motion } from "framer-motion"
 import Logo from "./Logo"
 
 const SpaceHeader = () => {
+  const featuresRef = useRef(null)
+  const solutionRef = useRef(null)
+  const testimonialsRef = useRef(null)
+  const blogRef = useRef(null)
+
+  const scrollToSection = (ref) => {
+    ref.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const navItems = [
+    { name: "Features", ref: featuresRef },
+    { name: "Solution", ref: solutionRef },
+    { name: "Testimonials", ref: testimonialsRef },
+    { name: "Blog", ref: blogRef },
+  ]
+
   return (
     <motion.div 
       className="px-5"
@@ -62,13 +78,17 @@ const SpaceHeader = () => {
             >
               <div className="text-gray-300 lg:pr-4 lg:w-auto w-full lg:pt-0">
                 <ul className="tracking-wide font-medium lg:text-sm flex-col flex lg:flex-row gap-6 lg:gap-0">
-                  {["Features", "Solution", "Testimonials", "Blog"].map((item) => (
-                    <motion.li key={item} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                  {navItems.map((item) => (
+                    <motion.li key={item.name} whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
                       <a
-                        href={`#${item.toLowerCase()}`}
+                        href={`#${item.name.toLowerCase()}`}
                         className="block md:px-4 transition hover:text-blue-400"
+                        onClick={(e) => {
+                          e.preventDefault()
+                          scrollToSection(item.ref)
+                        }}
                       >
-                        <span>{item}</span>
+                        <span>{item.name}</span>
                       </a>
                     </motion.li>
                   ))}
@@ -83,6 +103,10 @@ const SpaceHeader = () => {
                               active:duration-75 active:before:scale-95 sm:w-max"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  onClick={(e) => {
+                    e.preventDefault()
+                    window.location.href = '/dashboard'
+                  }}
                 >
                   <span className="relative text-sm font-semibold text-white">
                     Get Started
@@ -98,3 +122,4 @@ const SpaceHeader = () => {
 }
 
 export default SpaceHeader
+
