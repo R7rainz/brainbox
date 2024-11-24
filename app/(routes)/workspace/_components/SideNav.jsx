@@ -14,10 +14,11 @@ import NotifiationBox from './NotifiationBox';
 import { Button } from '@/components/ui/button';
 import { Progress } from "@/components/ui/progress";
 import { db } from '@/config/firebaseConfig';
+import { useParams } from 'next/navigation'; // Importing useParams hook
 
 const MAX_FILE = Number(process.env.NEXT_PUBLIC_MAX_FILE_COUNT) || 5;
 
-function SideNav({ params }) {
+function SideNav() {
     const [documentList, setDocumentList] = useState([]);
     const [documentName, setDocumentName] = useState("Untitled Document");
     const [coverImage, setCoverImage] = useState('/cover.png');
@@ -25,12 +26,16 @@ function SideNav({ params }) {
     const { user } = useUser();
     const router = useRouter();
 
+    const params = useParams(); // Get the params using the useParams hook
+    const workspaceId = params?.workspaceid; // Now we safely get workspaceid from params
+
+    // Fetch document list for the workspace
     const GetDocumentList = useCallback(() => {
-        if (!params?.workspaceid) return;
+        if (!workspaceId) return; // Early exit if workspaceId is not available
 
         const q = query(
             collection(db, 'workspaceDocuments'),
-            where('workspaceId', '==', Number(params.workspaceid))
+            where('workspaceId', '==', Number(workspaceId))
         );
 
         const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -39,11 +44,14 @@ function SideNav({ params }) {
         });
 
         return () => unsubscribe();
-    }, [params?.workspaceid]);
+    }, [workspaceId]);
 
+    // Fetch document list when params.workspaceid is available
     useEffect(() => {
-        if (params) GetDocumentList();
-    }, [params, GetDocumentList]);
+        if (workspaceId) {
+            GetDocumentList();
+        }
+    }, [workspaceId, GetDocumentList]);
 
     const CreateNewDocument = async () => {
         if (documentList?.length >= MAX_FILE) {
@@ -61,7 +69,7 @@ function SideNav({ params }) {
         try {
             const docId = uuid4();
             await setDoc(doc(db, 'workspaceDocuments', docId.toString()), {
-                workspaceId: Number(params?.workspaceid),
+                workspaceId: Number(workspaceId),
                 createdBy: user?.primaryEmailAddress?.emailAddress,
                 coverImage: null,
                 emoji: null,
@@ -75,7 +83,7 @@ function SideNav({ params }) {
                 output: [],
             });
 
-            router.replace(`/workspace/${params?.workspaceid}/${docId}`);
+            router.replace(`/workspace/${workspaceId}/${docId}`);
         } catch (error) {
             console.error('Error creating new document:', error);
         } finally {
@@ -157,4 +165,3 @@ function SideNav({ params }) {
 }
 
 export default SideNav;
-
