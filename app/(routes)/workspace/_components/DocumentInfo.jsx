@@ -18,30 +18,45 @@ function DocumentInfo({ params, updateDocumentInfo }) {
     const [documentInfo, setDocumentInfo] = useState()
     
     useEffect(() => {
-        if (params) GetDocumentInfo()
+        if (params?.documentid) GetDocumentInfo()
     }, [params])
 
     const GetDocumentInfo = async () => {
-        const docRef = doc(db, 'workspaceDocuments', params?.documentid)
-        const docSnap = await getDoc(docRef)
+        try {
+            const docRef = doc(db, 'workspaceDocuments', params.documentid)
+            const docSnap = await getDoc(docRef)
 
-        if (docSnap.exists()) {
-            setDocumentInfo(docSnap.data())
-            setEmoji(docSnap.data()?.emoji)
-            docSnap.data()?.coverImage && setCoverImage(docSnap.data()?.coverImage)
+            if (docSnap.exists()) {
+                setDocumentInfo(docSnap.data())
+                setEmoji(docSnap.data()?.emoji)
+                docSnap.data()?.coverImage && setCoverImage(docSnap.data()?.coverImage)
+            } else {
+                console.log("No such document!")
+            }
+        } catch (error) {
+            console.error("Error fetching document:", error)
+            toast.error('Failed to fetch document info')
         }
     }
 
     const handleUpdateDocumentInfo = async (key, value) => {
-        const docRef = doc(db, 'workspaceDocuments', params?.documentid)
-        await updateDoc(docRef, {
-            [key]: value
-        })
+        try {
+            const docRef = doc(db, 'workspaceDocuments', params.documentid)
+            await updateDoc(docRef, {
+                [key]: value
+            })
 
-        updateDocumentInfo(key, value)
-        toast('Document Updated!', {
-            description: `Successfully updated ${key}.`,
-        })
+            if (typeof updateDocumentInfo === 'function') {
+                updateDocumentInfo(key, value)
+            }
+
+            toast.success('Document Updated!', {
+                description: `Successfully updated ${key}.`,
+            })
+        } catch (error) {
+            console.error("Error updating document:", error)
+            toast.error('Failed to update document')
+        }
     }
 
     return (
