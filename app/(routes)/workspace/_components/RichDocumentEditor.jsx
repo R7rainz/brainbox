@@ -37,7 +37,6 @@ function RichDocumentEditor({ params }) {
     console.log("UPDATE")
     ref.current.save().then(async (outputData) => {
       const docRef = doc(db, 'documentOutput', params?.documentid);
-     
       await updateDoc(docRef, {
         output: JSON.stringify(outputData),
         editedBy: user?.primaryEmailAddress?.emailAddress
