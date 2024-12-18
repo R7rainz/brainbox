@@ -38,7 +38,7 @@ function GenerateAITemplate({setGenerateAIOutput}) {
 
   return (
     <div>
-        <Button variant="outline" className="flex gap-2"
+        <Button variant="outline" className="flex gap-2 bg-black"
         onClick={()=>setOpen(true)}> 
         <LayoutGrid className='h-4 w-4'/> Generate AI Template</Button>
     
@@ -50,7 +50,7 @@ function GenerateAITemplate({setGenerateAIOutput}) {
                 <DialogDescription>
                     <div>
                     <h2 className='mt-5'>What you want to write in document?</h2>
-                    <Input placeholder="Ex. Project Idea" 
+                    <Input placeholder="Ex. Create a template for note taking..." 
                         onChange={(event)=>setUserInput(event?.target.value)}
                     />
                     <div className='mt-5 flex gap-5 justify-end'>
