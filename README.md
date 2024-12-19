@@ -1,27 +1,33 @@
-<div align="center">
+<p align="center">
+  <img src="https://your-image-url-here.com/brainbox-logo.png" alt="Brainbox Logo" width="200"/>
+</p>
 
-# 🧠 Brainbox
+<h1 align="center">🧠 Brainbox</h1>
 
-**The AI-Powered Note-Taking Revolution**
+<p align="center">
+  <strong>The AI-Powered Note-Taking Revolution</strong>
+</p>
 
-[![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://semver.org)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
+<p align="center">
+  <a href="#features">Features</a> •
+  <a href="#getting-started">Getting Started</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#usage">Usage</a> •
+  <a href="#contributing">Contributing</a> •
+  <a href="#license">License</a>
+</p>
 
-[Features](#-features) • [Installation](#-installation) • [Usage](#-usage) • [Contributing](#-contributing) • [License](#-license)
+<p align="center">
+  <img src="https://img.shields.io/badge/version-1.0.0-blue.svg" alt="version"/>
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="license"/>
+  <img src="https://img.shields.io/badge/node-%3E%3D%2014.0.0-brightgreen.svg" alt="node version"/>
+</p>
 
-</div>
+<p align="center">
+  <img src="https://your-image-url-here.com/brainbox-demo.gif" alt="Brainbox Demo" width="600"/>
+</p>
 
 ---
-
-## 📚 Table of Contents
-
-- [About](#-about)
-- [Features](#-features)
-- [Installation](#-installation)
-- [Usage](#-usage)
-- [Contributing](#-contributing)
-- [License](#-license)
 
 ## 🌟 About
 
@@ -54,18 +60,57 @@ Brainbox is your ultimate note-taking companion, designed to boost productivity 
 - **Themes**: Choose from light, dark, or custom themes.
 - **Layouts**: Tailor your workspace to suit your workflow.
 
-## 🚀 Installation
+## 🚀 Getting Started
 
 ### Prerequisites
 
 Ensure you have the following installed:
-- Node.js
-- npm
+- Node.js (v14.0.0 or later)
+- npm (v6.0.0 or later)
 
-### Steps
+### Installation
 
-1. Clone the repository:
+1. **Clone the Repository**
    ```bash
-   git clone https://github.com/R7rainz/brainbox.git
+   git clone git@github.com:R7rainz/brainbox.git
    cd brainbox
+   ```
 
+2. **Install Dependencies**
+   ```bash
+   npm install
+   ```
+
+3. **Start the Application**
+   ```bash
+   npm start
+   ```
+
+## 🖥️ Usage
+
+1. Open your browser and navigate to `http://localhost:3000`
+2. Sign up for a new account or log in
+3. Start creating your first workspace and enjoy the Brainbox experience!
+
+## 🤝 Contributing
+
+We welcome contributions to Brainbox! Please see our [Contributing Guide](CONTRIBUTING.md) for more details.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<p align="center">
+  Made with ❤️ by the Brainbox Team
+</p>
+
+```
+   _____             _       _               
+  |  __ \           (_)     | |              
+  | |__) |_ _ __ ___ _ _ __ | |__   _____  __
+  |  _  / _` / '__/ _ \ | '_ \| '_ \ / _ \ \/ /
+  | | \ \ (_| | | |  __/ | | | | |_) | (_) >  < 
+  |_|  \_\__,_|_|  \___|_|_| |_|_.__/ \___/_/\_\
+```
