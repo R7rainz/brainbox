@@ -53,21 +53,11 @@ Brainbox isn't just another note-taking app – it's your personal AI-powered th
     </td>
   </tr>
   <tr>
-    <td align="center"><h3>🔍</h3></td>
-    <td><h3>Advanced Search</h3></td>
-    <td>
-      • Powerful Search Engine<br>
-      • Smart Tagging System<br>
-      • Semantic Search
-    </td>
-  </tr>
-  <tr>
     <td align="center"><h3>🌐</h3></td>
     <td><h3>Cross-Platform Sync</h3></td>
     <td>
       • Real-Time Synchronization<br>
       • Secure Cloud Backup<br>
-      • Offline Mode
     </td>
   </tr>
 </table>
@@ -76,7 +66,7 @@ Brainbox isn't just another note-taking app – it's your personal AI-powered th
 
 ## 🚀 Installation
 
-```bash
+```zsh
 # Clone the Brainbox repository
 git clone git@github.com:R7rainz/brainbox.git
 
