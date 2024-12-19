@@ -8,7 +8,7 @@ import Checklist from '@editorjs/checklist';
 import SimpleImage from 'simple-image-editorjs';
 import Table from '@editorjs/table';
 import CodeTool from '@editorjs/code';
-import { doc, onSnapshot, updateDoc } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/config/firebaseConfig';
 import { useUser } from '@clerk/nextjs';
 import Paragraph from '@editorjs/paragraph';
@@ -18,6 +18,7 @@ function RichDocumentEditor({ params }) {
   const editorRef = useRef(null);
   const { user } = useUser();
   const [isFetched, setIsFetched] = useState(false);
+  const [initialContent, setInitialContent] = useState(null);
 
   const saveDocumentDebounced = useCallback(
     debounce(async (outputData) => {
@@ -33,10 +34,26 @@ function RichDocumentEditor({ params }) {
   );
 
   useEffect(() => {
-    if (!user || editorRef.current) return;
+    if (!user || !params?.documentid) return;
+
+    const fetchInitialContent = async () => {
+      const docRef = doc(db, 'documentOutput', params.documentid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists() && docSnap.data().output) {
+        setInitialContent(JSON.parse(docSnap.data().output));
+      }
+      setIsFetched(true);
+    };
+
+    fetchInitialContent();
+  }, [user, params]);
+
+  useEffect(() => {
+    if (!user || editorRef.current || !isFetched) return;
 
     const editor = new EditorJS({
       holder: 'editorjs',
+      data: initialContent,
       onChange: () => {
         editor.save().then((outputData) => {
           saveDocumentDebounced(outputData);
@@ -85,7 +102,7 @@ function RichDocumentEditor({ params }) {
         editorRef.current.destroy();
       }
     };
-  }, [user, saveDocumentDebounced]);
+  }, [user, saveDocumentDebounced, initialContent, isFetched]);
 
   useEffect(() => {
     if (!user || !params?.documentid) return;
@@ -95,16 +112,13 @@ function RichDocumentEditor({ params }) {
         const data = docSnapshot.data();
         if (!data) return;
 
-        if (data.editedBy !== user.primaryEmailAddress?.emailAddress || !isFetched) {
-          if (editorRef.current && data.output) {
-            editorRef.current.render(JSON.parse(data.output));
-          }
-          setIsFetched(true);
+        if (data.editedBy !== user.primaryEmailAddress?.emailAddress && editorRef.current && data.output) {
+          editorRef.current.render(JSON.parse(data.output));
         }
       });
 
     return () => unsubscribe();
-  }, [user, params, isFetched]);
+  }, [user, params]);
 
   const handleGenerateAIOutput = (output) => {
     if (editorRef.current) {
@@ -136,3 +150,4 @@ function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
+
