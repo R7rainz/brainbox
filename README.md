@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://your-image-url-here.com/brainbox-logo.png" alt="Brainbox Logo" width="200"/>
+  <img src="file:///home/rainz/Downloads/DALL%C2%B7E%202024-11-20%2020.49.32%20-%20A%20cartoon-style%20human%20brain%20meditating,%20with%20a%20peaceful%20expression.%20The%20brain%20should%20be%20sitting%20cross-legged%20in%20a%20meditative%20pose,%20surrounded%20by%20a%20cal.webp" alt="Brainbox Logo" width="200"/>
 </p>
 
 <h1 align="center">🧠 Brainbox</h1>
