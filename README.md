@@ -70,15 +70,6 @@ Brainbox isn't just another note-taking app – it's your personal AI-powered th
       • Offline Mode
     </td>
   </tr>
-  <tr>
-    <td align="center"><h3>🎨</h3></td>
-    <td><h3>Customization</h3></td>
-    <td>
-      • Themes (Light/Dark/Custom)<br>
-      • Flexible Layouts<br>
-      • Personalized Widgets
-    </td>
-  </tr>
 </table>
 
 ---
