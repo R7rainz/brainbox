@@ -19,6 +19,7 @@ function RichDocumentEditor({ params }) {
   const { user } = useUser();
   const [isFetched, setIsFetched] = useState(false);
   const [initialContent, setInitialContent] = useState(null);
+  const [isEditorReady, setIsEditorReady] = useState(false);
 
   const saveDocumentDebounced = useCallback(
     debounce(async (outputData) => {
@@ -29,7 +30,7 @@ function RichDocumentEditor({ params }) {
         output: JSON.stringify(outputData),
         editedBy: user.primaryEmailAddress?.emailAddress
       });
-    }, 1000),
+    }, 2000),
     [user, params]
   );
 
@@ -59,16 +60,22 @@ function RichDocumentEditor({ params }) {
           saveDocumentDebounced(outputData);
         });
       },
+      onReady: () => {
+        setIsEditorReady(true);
+      },
+      autofocus: true,
       tools: {
         header: Header,
         delimiter: Delimiter,
-        paragraph: Paragraph,
+        paragraph: {
+          class: Paragraph,
+          inlineToolbar: true,
+        },
         alert: {
           class: Alert,
           inlineToolbar: true,
           shortcut: 'CMD+SHIFT+A',
           config: {
-            alertTypes: ['primary', 'secondary', 'info', 'success', 'warning', 'danger', 'light', 'dark'],
             defaultType: 'primary',
             messagePlaceholder: 'Enter something',
           }
@@ -84,14 +91,10 @@ function RichDocumentEditor({ params }) {
         },
         checklist: {
           class: Checklist,
-          shortcut: 'CMD+SHIFT+C',
           inlineToolbar: true,
         },
         image: SimpleImage,
-        code: {
-          class: CodeTool,
-          shortcut: 'CMD+SHIFT+P'
-        },
+        code: CodeTool,
       },
     });
 
@@ -100,36 +103,38 @@ function RichDocumentEditor({ params }) {
     return () => {
       if (editorRef.current && editorRef.current.destroy) {
         editorRef.current.destroy();
+        editorRef.current = null;
       }
     };
   }, [user, saveDocumentDebounced, initialContent, isFetched]);
 
   useEffect(() => {
-    if (!user || !params?.documentid) return;
+    if (!user || !params?.documentid || !isEditorReady) return;
 
     const unsubscribe = onSnapshot(doc(db, 'documentOutput', params.documentid),
       (docSnapshot) => {
         const data = docSnapshot.data();
-        if (!data) return;
+        if (!data || !data.output) return;
 
-        if (data.editedBy !== user.primaryEmailAddress?.emailAddress && editorRef.current && data.output) {
-          editorRef.current.render(JSON.parse(data.output));
+        if (data.editedBy !== user.primaryEmailAddress?.emailAddress && editorRef.current) {
+          const newContent = JSON.parse(data.output);
+          editorRef.current.render(newContent);
         }
       });
 
     return () => unsubscribe();
-  }, [user, params]);
+  }, [user, params, isEditorReady]);
 
-  const handleGenerateAIOutput = (output) => {
+  const handleGenerateAIOutput = useCallback((output) => {
     if (editorRef.current) {
       editorRef.current.render(output);
     }
-  };
+  }, []);
 
   return (
     <div className="relative">
-      <div id="editorjs" className="w-[70%]"></div>
-      <div className="fixed bottom-10 md:ml-80 left-0 z-10">
+      <div id="editorjs" className="w-full"></div>
+      <div className="fixed bottom-10 left-10 z-10">
         <GenerateAITemplate setGenerateAIOutput={handleGenerateAIOutput} />
       </div>
     </div>
@@ -150,4 +155,3 @@ function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
-
