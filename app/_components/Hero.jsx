@@ -32,7 +32,7 @@ const FuturisticHeroWithFeatures = () => {
   return (
     <div className="relative min-h-screen overflow-hidden bg-black text-white">
       {/* Futuristic grid background */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 z-0"
         style={{ y: backgroundY }}
       >
@@ -40,7 +40,7 @@ const FuturisticHeroWithFeatures = () => {
       </motion.div>
 
       {/* Glowing orb */}
-      <motion.div 
+      <motion.div
         className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500 rounded-full filter blur-[128px] opacity-20 animate-pulse"
         style={{ opacity }}
       />
@@ -82,17 +82,17 @@ const FuturisticHeroWithFeatures = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             >
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-8 py-6 rounded-md shadow-lg shadow-blue-500/50 transition-all duration-300 group"
                 onClick={() => window.location.href = '/dashboard'}
               >
                 <span>Get Started</span>
                 <ChevronRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Button>
-              <Button 
-                size="lg" 
-                variant="outline" 
+              <Button
+                size="lg"
+                variant="outline"
                 className="bg-transparent text-blue-400 border-blue-500 hover:bg-blue-950 hover:text-blue-300 text-lg px-8 py-6 rounded-md shadow-lg shadow-blue-500/30 transition-all duration-300"
                 onClick={scrollToFeatures}
               >
@@ -110,7 +110,7 @@ const FuturisticHeroWithFeatures = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="bg-gray-800 border-gray-700">
-                <motion.div 
+                <motion.div
                   className="p-6"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}

@@ -25,7 +25,7 @@ function RichDocumentEditor({ params }) {
   const { user } = useUser();
   const [documentOutput, setDocumentOutput] = useState([]);
   // const [isFetched,setIsFetched]=useState(false);
-  let isFetched=false
+  let isFetched = false
   useEffect(() => {
     user && InitEditor();
   }, [user])
@@ -37,7 +37,7 @@ function RichDocumentEditor({ params }) {
     console.log("UPDATE")
     ref.current.save().then(async (outputData) => {
       const docRef = doc(db, 'documentOutput', params?.documentid);
-     
+
       await updateDoc(docRef, {
         output: JSON.stringify(outputData),
         editedBy: user?.primaryEmailAddress?.emailAddress
@@ -48,9 +48,9 @@ function RichDocumentEditor({ params }) {
   const GetDocumentOutput = () => {
     const unsubscribe = onSnapshot(doc(db, 'documentOutput', params?.documentid),
       (doc) => {
-        if (doc.data()?.editedBy != user?.primaryEmailAddress?.emailAddress||isFetched==false)
-          doc.data().editedBy&&editor?.render(JSON.parse(doc.data()?.output)); 
-        isFetched=true  
+        if (doc.data()?.editedBy != user?.primaryEmailAddress?.emailAddress || isFetched == false)
+          doc.data().editedBy && editor?.render(JSON.parse(doc.data()?.output));
+        isFetched = true
       })
   }
 
@@ -58,10 +58,10 @@ function RichDocumentEditor({ params }) {
     if (!editor?.current) {
       editor = new EditorJS({
         onChange: (api, event) => {
-           SaveDocument()
+          SaveDocument()
           //ref.current.save().then(async (outputData) => {console.log(outputData)})
         },
-        onReady:()=>{
+        onReady: () => {
           GetDocumentOutput()
         },
         /**
@@ -71,7 +71,7 @@ function RichDocumentEditor({ params }) {
         tools: {
           header: Header,
           delimiter: Delimiter,
-          paragraph:Paragraph,
+          paragraph: Paragraph,
           alert: {
             class: Alert,
             inlineToolbar: true,
@@ -114,7 +114,7 @@ function RichDocumentEditor({ params }) {
     <div className=' '>
       <div id='editorjs' className='w-[70%]'></div>
       <div className='fixed bottom-10 md:ml-80 left-0 z-10'>
-        <GenerateAITemplate setGenerateAIOutput={(output)=>editor?.render(output)} />
+        <GenerateAITemplate setGenerateAIOutput={(output) => editor?.render(output)} />
       </div>
     </div>
   )
