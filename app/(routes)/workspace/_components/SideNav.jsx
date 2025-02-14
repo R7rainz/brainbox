@@ -20,7 +20,7 @@ const MAX_FILE = Number(process.env.NEXT_PUBLIC_MAX_FILE_COUNT) || 5;
 
 function SideNav() {
     const [documentList, setDocumentList] = useState([]);
-    const [documentName, setDocumentName] = useState("Untitled Document");
+    const [documentName, setDocumentName] = useState("Enter Document Name");
     const [coverImage, setCoverImage] = useState('/cover.png');
     const [loading, setLoading] = useState(false);
     const { user } = useUser();
@@ -100,7 +100,7 @@ function SideNav() {
     };
 
     return (
-        <motion.div 
+        <motion.div
             className="h-screen md:w-72 hidden md:block fixed bg-gray-900 p-5 shadow-lg"
             initial={{ x: -100, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
@@ -112,7 +112,7 @@ function SideNav() {
                     <Bell className="h-5 w-5 text-gray-400 hover:text-blue-400 transition-colors" />
                 </NotifiationBox>
             </div>
-            <motion.hr 
+            <motion.hr
                 className="my-5 border-gray-800"
                 initial={{ scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -121,8 +121,8 @@ function SideNav() {
             <div>
                 <div className="flex justify-between items-center mb-4">
                     <h2 className="font-medium text-gray-200">{documentName}</h2>
-                    <Button 
-                        size="sm" 
+                    <Button
+                        size="sm"
                         className="bg-blue-600 hover:bg-blue-700 text-white"
                         onClick={CreateNewDocument}
                     >
@@ -139,25 +139,25 @@ function SideNav() {
             <DocumentList documentList={documentList} params={params} />
 
             {/* Progress Bar */}
-            <motion.div 
+            <motion.div
                 className="absolute bottom-10 w-[85%]"
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.5, delay: 0.4 }}
             >
-                <Progress 
-                    value={(documentList?.length / MAX_FILE) * 100} 
+                <Progress
+                    value={(documentList?.length / MAX_FILE) * 100}
                     className="bg-gray-800"
                 />
                 <h2 className="text-sm font-light text-gray-300 my-2">
                     <strong>{documentList?.length}</strong> out of <strong>{MAX_FILE}</strong> files used
                 </h2>
-                <Button 
-                    variant="outline" 
+                <Button
+                    variant="outline"
                     className="w-full mt-2 bg-gray-800 hover:bg-gray-700 text-blue-400 border-gray-700"
                     onClick={() => console.log("Upgrade clicked")}
                 >
-                    Upgrade for Unlimited Access
+                    Upgrade for Unlimited Access {/* need to add razor pay or stripe pay for this to work more */}
                 </Button>
             </motion.div>
         </motion.div>
